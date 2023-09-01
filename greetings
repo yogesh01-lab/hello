@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  body {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #f2f2f2;
+    transition: background-color 0.5s ease-in-out;
+  }
+  .popup-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    animation: fadeIn 2s forwards;
+  }
+  #name{
+    font-size: 30px;
+  }
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  .popup {
+    display: none;
+    background-color: white;
+    padding: 20px;
+    border: 1px solid #ccc;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    animation: popupAppear 0.5s forwards;
+    max-width: 90%;
+    width: 300px;
+  }
+  .popup button {
+    margin: 5px;
+  }
+  #celebration p{
+    font-size: 30px;
+  }
+  #celebration {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    animation: spread 2s forwards;
+  }
+  @keyframes spread {
+    0% {
+      transform: translate(-50%, -50%) scale(0);
+      opacity: 0;
+    }
+    100% {
+      transform: translate(-50%, -50%) scale(1);
+      opacity: 1;
+    }
+  }
+  @keyframes popupAppear {
+    from {
+      transform: translateY(100%);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+  @keyframes nameAppear {
+    from {
+      width: 0;
+    }
+    to {
+      width: 100%;
+    }
+  }
+</style>
+</head>
+<body>
+  <div class="popup-container">
+    <div class="popup">
+      <p>Can we be firends again?</p>
+      <button class="yesBtn">Yes</button>
+      <button class="noBtn">No</button>
+    </div>
+  </div>
+
+  <div id="celebration">
+    <p>Thank you!!! 😇😇😇</p>
+  </div>
+  
+  <div id="nameContainer">
+    <span id="name" style="display: inline-block; overflow: hidden;"></span>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const popupContainer = document.querySelector('.popup-container');
+      const celebration = document.getElementById('celebration');
+      const popupTemplate = document.querySelector('.popup');
+      const nameSpan = document.getElementById('name');
+      
+      let popupCounter = 0;
+      let allowPopups = true;
+
+      function showPopup() {
+        if (!allowPopups) {
+          return;
+        }
+        
+        const popup = popupTemplate.cloneNode(true);
+        popup.querySelector('.yesBtn').addEventListener('click', function() {
+          allowPopups = false;
+          popup.style.display = 'none';
+          celebration.style.display = 'block';
+          document.body.style.backgroundColor = '#333'; // Change background color on Yes
+        });
+        popup.querySelector('.noBtn').addEventListener('click', function() {
+          const popups = [
+            "Are you sure?",
+            "This is your last chance!",
+            "Are you really sure?"
+          ];
+
+          if (popupCounter < popups.length) {
+            popup.querySelector('p').textContent = popups[popupCounter];
+          } else {
+            popup.querySelector('p').textContent = "Please yaar!! 😔";
+          }
+          popupCounter++;
+        });
+
+        popupContainer.appendChild(popup);
+        popup.style.display = 'block';
+      }
+
+      setTimeout(function() {
+        animateName();
+        setTimeout(function() {
+          showPopup();
+          nameSpan.style.display = 'none';
+        }, 3000);
+      }, 0);
+
+      function animateName() {
+        const name = "Hiiii Mitali";
+        let index = 0;
+        const interval = setInterval(function() {
+          nameSpan.textContent = name.substring(0, index);
+          index++;
+          if (index > name.length) {
+            clearInterval(interval);
+          }
+        }, 150);
+      }
+    });
+  </script>
+</body>
+</html>
